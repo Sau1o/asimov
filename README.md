@@ -1,1 +1,5 @@
-#Asimov  Trilha Aplicações IA com Python
+#Asimov Trilha
+
+---
+
+Aplicações IA com Python
