@@ -1,5 +1,5 @@
-# Asimov Trilha
+# Asimov
 
 ---
 
-Aplicações IA com Python
+Trilha Aplicações IA com Python
