@@ -1,0 +1,5 @@
+nome = input("Qual o seu nome? ")
+idade = int(input("Qual a sua idade? "))
+print('Olá ' + nome)
+print(f'Seu nome possui {len(nome)} letras')
+print(f'Daqui a cinco anos você terá {idade + 5} anos')
