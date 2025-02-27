@@ -47,7 +47,7 @@ for estado in selecionados:
     rodada += 1
 
     print(f'Pergunta numero {rodada}.')
-    print(f'Qual a capital do estado: {estado[0]}')
+    print(f'-> Qual a capital do estado: {estado[0]}')
 
     resposta = input('Digite sua reposta ou digite q para encerrar o jogo: ')
 
@@ -55,6 +55,7 @@ for estado in selecionados:
         break
     elif resposta == estado[1]:
         pontos += 1
+    print("\n")
 
 print(f"Fim do jogo\nForam {rodada} rodadas e {pontos} acertos.")
 print(f"Um total de acertos de {pontos/rodada:02}%")
