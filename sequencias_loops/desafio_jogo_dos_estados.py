@@ -44,7 +44,6 @@ print('Lembre-se de digitar a primeira letra maiúscula e usar os acentos.')
 print("Tudo pronto. Vamos começar.")
 
 for estado in selecionados:
-    rodada += 1
 
     print(f'Pergunta numero {rodada}.')
     print(f'-> Qual a capital do estado: {estado[0]}')
@@ -55,7 +54,7 @@ for estado in selecionados:
         break
     elif resposta == estado[1]:
         pontos += 1
-    print("\n")
+    rodada += 1
 
 print(f"Fim do jogo\nForam {rodada} rodadas e {pontos} acertos.")
-print(f"Um total de acertos de {pontos/rodada:02}%")
+print(f"Um total de acertos de {pontos/rodada*100:.2f}%")
