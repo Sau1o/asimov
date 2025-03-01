@@ -46,7 +46,7 @@ def confirma_aluguel(carros, carro_escolhido, dias, carros_alugados):
 
     else:
         teste = False
-        return teste, carros_alugados, carros
+        return teste, carros, carros_alugados
 
     print(" ")
     print(f"Parabéns você alugou o {carro} por {dias} dias")

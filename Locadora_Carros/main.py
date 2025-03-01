@@ -46,4 +46,4 @@ while fim_do_programa:
         tela = 'n'
         fim_do_programa = False if teste == '1' else True
 
-print("Obrigado por alugar conosco.")
+print("Obrigado por alugar conosco!")
