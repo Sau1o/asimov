@@ -11,6 +11,7 @@ for valor in valores:
 
 print(f'Triplos com for: {triplos}')
 
+# Solução com compreensão de lista.
 triplos = [valor*3 for valor in valores]
 
 print(f'Triplos com compreensão de lista: {triplos}')
