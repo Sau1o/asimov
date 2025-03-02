@@ -10,7 +10,7 @@
 # de programação e estudam na Asimov Academy, mas que não gostam de jogar
 # futebol
 
-programacao = {'Ricardo', 'Robert', 'Pedro', 'Vinicius'}
+programacao = {'Ricardo', 'Roberto', 'Pedro', 'Vinicius'}
 futebol = {'Mateus', 'Roberto', 'Paulo', 'Vinicius'}
 estudam = {'Ricardo', 'Mateus', 'Paulo', 'Pedro'}
 
