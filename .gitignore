@@ -1,1 +1,6 @@
 __pycache__
+.env
+node_modules
+api.py
+package.json
+package-lock.json
