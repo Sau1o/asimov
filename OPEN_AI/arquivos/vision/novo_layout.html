@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutoriais da Asimov</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #eceff1;
+    }
+    .header {
+      background-color: #004d40;
+      color: #ffffff;
+      padding: 20px;
+      text-align: center;
+    }
+    .search-bar {
+      margin: 20px auto;
+      display: block;
+      width: 60%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+    .filter-section {
+      padding: 20px;
+      text-align: center;
+    }
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .card {
+      background-color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-radius: 5px;
+      padding: 15px;
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card h3 {
+      margin-top: 0;
+      color: #004d40;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1>Tutoriais da Asimov</h1>
+  </header>
+
+  <input type="text" class="search-bar" placeholder="Pesquisar...">
+
+  <div class="filter-section">
+    <!-- Filtros como dropdowns ou botões poderiam ser adicionados aqui -->
+  </div>
+
+  <div class="card-container">
+    <!-- Cards são adicionados aqui com loops ou servindo de informações via back-end -->
+    <div class="card">
+      <h3>Título Tutorial</h3>
+      <p>Autor: Nome</p>
+      <p>Data: YYYY-MM-DD</p>
+    </div>
+    <!-- Mais cards seguiriam -->
+  </div>
+
+</body>
+</html>
