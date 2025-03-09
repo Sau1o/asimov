@@ -62,8 +62,14 @@
 # Resposta ajustada com uso de templating em loop
 import requests
 from transformers import AutoTokenizer
+import os
 
-token = '<YOUR TOKEN>'
+import dotenv
+
+dotenv.load_dotenv()
+
+token = os.environ['TOKEN_HF']
+
 headers = {'Authorization': f'Bearer {token}'}
 
 modelo = 'mistralai/Mixtral-8x7B-Instruct-v0.1'
