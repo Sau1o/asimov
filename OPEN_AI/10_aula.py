@@ -42,7 +42,7 @@ tools = [
                         'description': 'O período que será retornado de dados históriocos \
                                         sendo "1mo" equivalente a um mês de dados, "1d" a \
                                         1 dia e "1y" a 1 ano',
-                        'enum': ["1d","5d","1mo","6mo","1y","5y","10y","ytd","max"]
+                        'enum': ["1d", "5d", "1mo", "6mo", "1y", "5y", "10y", "ytd", "max"]
                     }
                 }
             }
@@ -51,17 +51,17 @@ tools = [
 
 ]
 
-funcoes_disponiveis = {'retorna_cotacao_acao_historica': retorna_cotacao_acao_historica}
+funcoes_disponiveis = {
+    'retorna_cotacao_acao_historica': retorna_cotacao_acao_historica}
 
 
 def gera_texto(mensagens):
     resposta = client.chat.completions.create(
         messages=mensagens,
-        model='gpt-3.5-turbo-0125',
+        model='gpt-4o-mini',
         tools=tools,
         tool_choice='auto'
     )
-
 
     tool_calls = resposta.choices[0].message.tool_calls
 
@@ -80,10 +80,10 @@ def gera_texto(mensagens):
             })
         segunda_resposta = client.chat.completions.create(
             messages=mensagens,
-            model='gpt-3.5-turbo-0125',
+            model='gpt-4o-mini',
         )
         mensagens.append(segunda_resposta.choices[0].message)
-    
+
     print(f'Assistant: {mensagens[-1].content}')
 
     return mensagens
@@ -91,10 +91,12 @@ def gera_texto(mensagens):
 
 if __name__ == '__main__':
 
-    print('Bem-vindo ao ChatBot Financeiro da Asimov.')
+    print('Bem-vindo ao meu Chat Financeiro.')
+    print('Criado no Curso Da Asimov Academy.')
 
     while True:
         input_usuario = input('User: ')
+        if (input_usuario == 'q'):
+            break
         mensagens = [{'role': 'user', 'content': input_usuario}]
         mensagens = gera_texto(mensagens)
-
