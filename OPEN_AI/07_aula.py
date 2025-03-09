@@ -30,9 +30,12 @@ def geracao_texto(mensagens):
 
 if __name__ == '__main__':
 
-    print('Bem-vindo ao chatBot com Python da Asimov :)')
+    print('Bem-vindo ao meu ChatBot com ChatGpt:')
+    print('Digite q para sair e encerrar a conversa')
     mensagens = []
     while True:
         input_usuario = input('User: ')
+        if (input_usuario == 'q'):
+            break
         mensagens.append({'role': 'user', 'content': input_usuario})
         mensagens = geracao_texto(mensagens)
