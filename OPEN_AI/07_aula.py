@@ -5,10 +5,11 @@ _ = load_dotenv(find_dotenv())
 
 client = openai.Client()
 
+
 def geracao_texto(mensagens):
     resposta = client.chat.completions.create(
         messages=mensagens,
-        model='gpt-3.5-turbo-0125',
+        model='gpt-4o-mini',
         temperature=0,
         max_tokens=1000,
         stream=True,
@@ -22,7 +23,7 @@ def geracao_texto(mensagens):
             print(texto, end='')
             texto_completo += texto
     print()
-    
+
     mensagens.append({'role': 'assistant', 'content': texto_completo})
     return mensagens
 
@@ -35,4 +36,3 @@ if __name__ == '__main__':
         input_usuario = input('User: ')
         mensagens.append({'role': 'user', 'content': input_usuario})
         mensagens = geracao_texto(mensagens)
-
