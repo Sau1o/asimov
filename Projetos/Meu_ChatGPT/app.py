@@ -16,48 +16,46 @@ def geracao_texto(mensagens):
         stream=True,
     )
 
-    print('Assistant: ', end='')
     texto_completo = ''
     for resposta_stream in resposta:
         texto = resposta_stream.choices[0].delta.content
         if texto:
-            print(texto, end='')
             texto_completo += texto
-    print()
-
-    mensagens.append({'role': 'assistant', 'content': texto_completo})
-    return mensagens
+    return texto_completo
 
 
 def pagina_principal():
+    if not 'mensagens' in st.session_state:
+        st.session_state.mensagens = []
+
+    mensagens = st.session_state['mensagens']
     st.header('🤖 Coelho ChatBot', divider=True)
 
-    mock_msgs = [{'role': 'user', 'content': 'pergunta 1'},
-                 {'role': 'assistant', 'content': 'resposta 1'},
-                 {'role': 'user', 'content': 'pergunta 2'},
-                 {'role': 'assistant', 'content': 'resposta 2'}]
-
-    for mensagem in mock_msgs:
+    for mensagem in mensagens:
         chat = st.chat_message(mensagem['role'])
         chat.markdown(mensagem['content'])
 
     prompt = st.chat_input('Fale com o chat.')
     if prompt:
         nova_mensagem = {'role': 'user', 'content': prompt}
-        chat = st.chat_message(mensagem['role'])
+        chat = st.chat_message(nova_mensagem['role'])
         chat.markdown(nova_mensagem['content'])
+        mensagens.append(nova_mensagem)
+
+        st.chat_message('assistant')
+        placeholder = chat.empty()
+        texto_completo = ''
+
+        placeholder.markdown("▌")
+        texto_completo = geracao_texto(mensagens)
+
+        placeholder.markdown(texto_completo + "▌")
+        placeholder.markdown(texto_completo)
+        nova_mensagem = {'role': 'assistant',
+                         'content': texto_completo}
+        mensagens.append(nova_mensagem)
+
+        st.session_state['mensagens'] = mensagens
 
 
 pagina_principal()
-
-if __name__ == '__main__':
-
-    print('Bem-vindo ao meu ChatBot com ChatGpt:')
-    print('Digite q para sair e encerrar a conversa')
-    mensagens = []
-    # while True:
-    #     input_usuario = input('User: ')
-    #     if (input_usuario == 'q'):
-    #         break
-    #     mensagens.append({'role': 'user', 'content': input_usuario})
-    #     mensagens = geracao_texto(mensagens)
