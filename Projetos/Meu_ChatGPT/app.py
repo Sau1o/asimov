@@ -35,6 +35,8 @@ def salvar_mensagens(mensagens):
         if mensagem['role'] == 'user':
             nome_mensagem = mensagem['content'][30]
             break
+    nome_arquivo = unidecode(nome_mensagem)
+    nome_arquivo = re.sub('\W+', '', nome_arquivo).lower()
 
 
 def pagina_principal():
