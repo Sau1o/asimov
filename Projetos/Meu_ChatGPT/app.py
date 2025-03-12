@@ -2,6 +2,9 @@ import streamlit as st
 import openai
 from dotenv import load_dotenv, find_dotenv
 
+import re
+from unidecode import unidecode
+
 _ = load_dotenv(find_dotenv())
 
 client = openai.Client()
@@ -22,6 +25,16 @@ def geracao_texto(mensagens):
         if texto:
             texto_completo += texto
     return texto_completo
+
+
+def salvar_mensagens(mensagens):
+    if len(mensagens) == 0:
+        return False
+    nome_mensagem = ''
+    for mensagem in mensagens:
+        if mensagem['role'] == 'user':
+            nome_mensagem = mensagem['content'][30]
+            break
 
 
 def pagina_principal():
