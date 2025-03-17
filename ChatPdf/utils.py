@@ -12,28 +12,11 @@ from langchain_openai.embeddings import OpenAIEmbeddings
 from langchain_openai.chat_models import ChatOpenAI
 from dotenv import load_dotenv, find_dotenv
 
-# from configs import *
+from configs import *
 
 _ = load_dotenv(find_dotenv())
 
 PASTA_ARQUIVOS = Path(__file__).parent / 'arquivos'
-MODEL_NAME = 'gpt-4o-mini'
-RETRIEVAL_SEARCH_TYPE = 'mmr'
-RETRIEVAL_KWARGS = {'k': 5, 'fetch_k': 20}
-PROMPT = '''Você é um Chatbot amigável que auxilia na interpretação 
-de documentos que lhe são fornecidos. 
-No contexto forncido estão as informações dos documentos do usuário. 
-Utilize o contexto para responder as perguntas do usuário.
-Se você não sabe a resposta, apenas diga que não sabe e não tente 
-inventar a resposta.
-
-Contexto:
-{context}
-
-Conversa atual:
-{chat_history}
-Human: {question}
-AI: '''
 
 
 def importacao_documentos():
@@ -73,17 +56,17 @@ def cria_chain_conversa():
     documentos = split_de_documentos(documentos)
     vector_store = cria_vector_store(documentos)
 
-    chat = ChatOpenAI(model=MODEL_NAME)
+    chat = ChatOpenAI(model=get_config('model_name'))
     memory = ConversationBufferMemory(
         return_messages=True,
         memory_key='chat_history',
         output_key='answer'
     )
     retriever = vector_store.as_retriever(
-        search_type=RETRIEVAL_SEARCH_TYPE,
-        search_kwargs=RETRIEVAL_KWARGS
+        search_type=get_config('retrieval_search_type'),
+        search_kwargs=get_config('retrieval_kwargs')
     )
-    prompt = PromptTemplate.from_template(PROMPT)
+    prompt = PromptTemplate.from_template(get_config('prompt'))
     chat_chain = ConversationalRetrievalChain.from_llm(
         llm=chat,
         memory=memory,
