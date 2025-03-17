@@ -1,11 +1,16 @@
 import streamlit as st
 from pathlib import Path
+from langchain.memory import ConversationBufferMemory
 
 PASTA_ARQUIVOS = Path(__file__).parent / 'arquivos'
 
 
 def cria_chain_conversa():
     st.session_state['chain'] = True
+    memory = ConversationBufferMemory(return_messages=True)
+    memory.chat_memory.add_user_message('Oi')
+    memory.chat_memory.add_ai_message('Eu sou uma LLM!')
+    st.session_state['memory'] = memory
     pass
 
 
@@ -33,9 +38,23 @@ def sidebar():
             st.rerun()
 
 
+def chat_window():
+    st.header('🤖 Bem-vindo ao Chat com PDF', divider=True)
+
+    if not 'chain' in st.session_state:
+        st.error('Faça o upload de pdf para começar!')
+        st.stop()
+
+    memory = st.session_state['memory']
+    mensagens = memory.load_memory_variables({})
+
+    st.write(mensagens)
+
+
 def main():
     with st.sidebar:
         sidebar()
+    chat_window()
 
 
 if __name__ == '__main__':
