@@ -1,18 +1,6 @@
 import streamlit as st
-from pathlib import Path
-from langchain.memory import ConversationBufferMemory
-import time
 
-PASTA_ARQUIVOS = Path(__file__).parent / 'arquivos'
-
-
-def cria_chain_conversa():
-    st.session_state['chain'] = True
-    memory = ConversationBufferMemory(return_messages=True)
-    memory.chat_memory.add_user_message('Oi')
-    memory.chat_memory.add_ai_message('Eu sou uma LLM!')
-    st.session_state['memory'] = memory
-    pass
+from utils import cria_chain_conversa, PASTA_ARQUIVOS
 
 
 def sidebar():
@@ -46,8 +34,10 @@ def chat_window():
         st.error('Faça o upload de pdf para começar!')
         st.stop()
 
-    memory = st.session_state['memory']
-    mensagens = memory.load_memory_variables({})['history']
+    chain = st.session_state['chain']
+    memory = chain.memory
+
+    mensagens = memory.load_memory_variables({})['chat_history']
 
     container = st.container()
     for mensagem in mensagens:
@@ -62,9 +52,7 @@ def chat_window():
         chat = container.chat_message('ai')
         chat.markdown('Gerando resposta')
 
-        time.sleep(2)
-        memory.chat_memory.add_user_message(nova_mensagem)
-        memory.chat_memory.add_ai_message('Eu sou uma LLM! de novo')
+        chain.invoke({'question': nova_mensagem})
         st.rerun()
 
 
