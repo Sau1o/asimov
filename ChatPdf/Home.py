@@ -1,6 +1,7 @@
 import streamlit as st
 from pathlib import Path
 from langchain.memory import ConversationBufferMemory
+import time
 
 PASTA_ARQUIVOS = Path(__file__).parent / 'arquivos'
 
@@ -46,9 +47,25 @@ def chat_window():
         st.stop()
 
     memory = st.session_state['memory']
-    mensagens = memory.load_memory_variables({})
+    mensagens = memory.load_memory_variables({})['history']
 
-    st.write(mensagens)
+    container = st.container()
+    for mensagem in mensagens:
+        chat = container.chat_message(mensagem.type)
+        chat.markdown(mensagem.content)
+
+    nova_mensagem = st.chat_input('Converse com os seus documentos...')
+
+    if nova_mensagem:
+        chat = container.chat_message('human')
+        chat.markdown(nova_mensagem)
+        chat = container.chat_message('ai')
+        chat.markdown('Gerando resposta')
+
+        time.sleep(2)
+        memory.chat_memory.add_user_message(nova_mensagem)
+        memory.chat_memory.add_ai_message('Eu sou uma LLM! de novo')
+        st.rerun()
 
 
 def main():
