@@ -6,3 +6,5 @@ package.json
 package-lock.json
 mensagens/
 teste.ipynb
+*.mp3
+*.mp4
