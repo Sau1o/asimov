@@ -121,6 +121,7 @@ def pagina_principal():
 
         st.session_state['mensagens'] = mensagens
         salvar_mensagens(mensagens)
+        st.rerun()
 
 
 # MAIN ==================================================
