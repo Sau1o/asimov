@@ -3,6 +3,11 @@ from langchain.memory import ConversationBufferMemory
 
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
+from langchain.prompts import ChatPromptTemplate
+
+import tempfile
+
+from loaders import *
 
 TIPOS_ARQUIVOS_VALIDOS = [
     'Site', 'Youtube', 'Pdf', 'Csv', 'Txt'
@@ -18,7 +23,28 @@ CONFIG_MODELOS = {'Groq':
 MEMORIA = ConversationBufferMemory()
 
 
-def carrega_modelo(provedor, modelo, api_key):
+def carrega_modelo(provedor, modelo, api_key, tipo_arquivo, arquivo):
+    # Mapeia os tipos de arquivo para suas respectivas funções de carregamento
+    funcoes_carregamento = {
+        'Site': carrega_site,
+        'Youtube': carrega_youtube,
+        'Pdf': carrega_pdf,
+        'Csv': carrega_csv,
+        'Txt': carrega_txt
+    }
+
+    # Se for 'Site' ou 'Youtube', processa diretamente
+    if tipo_arquivo in ['Site', 'Youtube']:
+        documento = funcoes_carregamento[tipo_arquivo](arquivo)
+
+    # Se for um arquivo (Pdf, Csv, Txt), usa tempfile
+    elif tipo_arquivo in ['Pdf', 'Csv', 'Txt']:
+        with tempfile.NamedTemporaryFile(suffix=f".{tipo_arquivo.lower()}", delete=False) as temp:
+            temp.write(arquivo.read())
+            nome_temp = temp.name
+        documento = funcoes_carregamento[tipo_arquivo](nome_temp)
+
+    # Configuração do chat
     chat = CONFIG_MODELOS[provedor]['chat'](model=modelo, api_key=api_key)
     st.session_state['chat'] = chat
 
@@ -75,7 +101,7 @@ def side_bar():
         st.session_state[f'api_key_{provedor}'] = api_key
 
     if st.button('Inicializar Oráculo', use_container_width=True):
-        carrega_modelo(provedor, modelo, api_key)
+        carrega_modelo(provedor, modelo, api_key, tipo_arquivo, arquivo)
 
 
 def main():
