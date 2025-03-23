@@ -1,4 +1,8 @@
 import streamlit as st
+from langchain.memory import ConversationBufferMemory
+
+from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI
 
 TIPOS_ARQUIVOS_VALIDOS = [
     'Site', 'Youtube', 'Pdf', 'Csv', 'Txt'
@@ -32,21 +36,21 @@ def pagina_chat():
 def side_bar():
     tabs = st.tabs(['Upload de Arquivos', 'Seleção de Modelos'])
     with tabs[0]:
-        tipo_arquivo = st.selectbox(
-            'Selecione o tipo de arquivo', TIPOS_ARQUIVOS_VALIDOS)
-        if tipo_arquivo == 'Site':
-            arquivo = st.text_input("Digite a url do site")
-        if tipo_arquivo == 'Youtube':
-            arquivo = st.text_input("Digite a url do video")
-        if tipo_arquivo == 'Pdf':
-            arquivo = st.file_uploader(
-                'Faça o upload do arquivo pdf', type=['.pdf'])
-        if tipo_arquivo == 'Csv':
-            arquivo = st.file_uploader(
-                'Faça o upload do arquivo pdf', type=['.csv'])
-        if tipo_arquivo == 'Txt':
-            arquivo = st.file_uploader(
-                'Faça o upload do arquivo pdf', type=['.txt'])
+
+        tipo_arquivo = st.selectbox("Escolha o tipo de arquivo", [
+                                    'Site', 'Youtube', 'Pdf', 'Csv', 'Txt'])
+
+        inputs = {
+            'Site': ("Digite a URL do site", st.text_input),
+            'Youtube': ("Digite a URL do vídeo", st.text_input),
+            'Pdf': ("Faça o upload do arquivo PDF", st.file_uploader, ['.pdf']),
+            'Csv': ("Faça o upload do arquivo CSV", st.file_uploader, ['.csv']),
+            'Txt': ("Faça o upload do arquivo TXT", st.file_uploader, ['.txt'])
+        }
+
+        label, func, *args = inputs[tipo_arquivo]
+        arquivo = func(label, *args) if args else func(label)
+
     with tabs[1]:
         provedor = st.selectbox(
             'Selecione o provedor dos modelo', CONFIG_MODELOS.keys())
