@@ -9,8 +9,7 @@ TIPOS_ARQUIVOS_VALIDOS = [
 ]
 
 CONFIG_MODELOS = {'Groq':
-                  {'modelos': ['llama-3.1-70b-versatile',
-                               'gemma2-9b-it', 'mixtral-8x7b-32768'],
+                  {'modelos': ['gemma2-9b-it'],
                    'chat': ChatGroq},
                   'OpenAI':
                   {'modelos': ['gpt-4o-mini', 'gpt-4o', 'o1-preview', 'o1-mini'],
