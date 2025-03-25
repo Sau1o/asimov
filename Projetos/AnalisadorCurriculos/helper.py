@@ -1,6 +1,9 @@
-import re, uuid, os
+import re
+import uuid
+import os
 import fitz
 from models.analysis import Analysis
+
 
 def read_uploaded_file(file_path):
     text = ""
@@ -8,6 +11,7 @@ def read_uploaded_file(file_path):
         for page in doc:
             text += page.get_text()
     return text
+
 
 def extract_data_analysis(resum_cv, job_id, resum_id, score) -> Analysis:
     secoes_dict = {
@@ -26,7 +30,7 @@ def extract_data_analysis(resum_cv, job_id, resum_id, score) -> Analysis:
         "skills": r"## Habilidades\s*([\s\S]*?)(?=##|$)",
         "education": r"## Educação\s*([\s\S]*?)(?=##|$)",
         "languages": r"## Idiomas\s*([\s\S]*?)(?=##|$)",
-        "salary_expectation": r"## Pretensão Salarial\s*([\s\S]*?)(?=##|$)"
+        # "salary_expectation": r"## Pretensão Salarial\s*([\s\S]*?)(?=##|$)"
     }
 
     def clean_string(string: str) -> str:
@@ -38,14 +42,17 @@ def extract_data_analysis(resum_cv, job_id, resum_id, score) -> Analysis:
             if secao == "name":
                 secoes_dict[secao] = clean_string(match.group(1))
             else:
-                secoes_dict[secao] = [clean_string(item) for item in match.group(1).split('\n') if item.strip()]
+                secoes_dict[secao] = [clean_string(
+                    item) for item in match.group(1).split('\n') if item.strip()]
 
     # Validação para garantir que nenhuma seção obrigatória esteja vazia
     for key in ["name", "education", "skills"]:
         if not secoes_dict[key] or (isinstance(secoes_dict[key], list) and not any(secoes_dict[key])):
-            raise ValueError(f"A seção '{key}' não pode ser vazia ou uma string vazia.")
+            raise ValueError(
+                f"A seção '{key}' não pode ser vazia ou uma string vazia.")
 
     return Analysis(**secoes_dict)
+
 
 def get_pdf_paths(directory):
     pdf_files = []
