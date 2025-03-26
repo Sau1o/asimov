@@ -7,7 +7,7 @@ load_dotenv()
 
 
 class GroqClient:
-    def __init__(self, model_id="llama-3.1-70b-versatile"):
+    def __init__(self, model_id="llama3-70b-8192"):
         # Inicializar o modelo de linguagem com o ID especificado
         self.model_id = model_id
         self.client = ChatGroq(model=model_id)

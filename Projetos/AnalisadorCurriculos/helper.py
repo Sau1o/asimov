@@ -1,13 +1,14 @@
 import re
 import uuid
 import os
-import fitz
+# import fitz
+import pymupdf
 from models.analysis import Analysis
 
 
 def read_uploaded_file(file_path):
     text = ""
-    with fitz.open(file_path) as doc:
+    with pymupdf.open(file_path) as doc:
         for page in doc:
             text += page.get_text()
     return text
@@ -48,6 +49,7 @@ def extract_data_analysis(resum_cv, job_id, resum_id, score) -> Analysis:
     # Validação para garantir que nenhuma seção obrigatória esteja vazia
     for key in ["name", "education", "skills"]:
         if not secoes_dict[key] or (isinstance(secoes_dict[key], list) and not any(secoes_dict[key])):
+            secoes_dict[key] = 'error'
             raise ValueError(
                 f"A seção '{key}' não pode ser vazia ou uma string vazia.")
 
