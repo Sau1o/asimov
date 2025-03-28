@@ -12,6 +12,9 @@ from dotenv import load_dotenv, find_dotenv
 
 _ = load_dotenv(find_dotenv())
 
+PASTA_ARQUIVOS = Path(__file__).parent / 'arquivos'
+PASTA_ARQUIVOS.mkdir(exist_ok=True)
+
 client = openai.OpenAI()
 
 
@@ -39,7 +42,43 @@ def transcreve_audio(caminho_audio, language='pt', response_format='text'):
 
 
 def tab_gravar_reuniao():
-    st.markdown('tab_gravar')
+    webrtc_ctx = webrtc_streamer(
+        key='recebe_audio',
+        mode=WebRtcMode.SENDONLY,
+        audio_receiver_size=1024,
+        media_stream_constraints={'video': False, 'audio': True}
+    )
+    if not webrtc_ctx.state.playing:
+        return
+    container = st.empty()
+    container.markdown('Comece a falar...')
+
+    pasta_reuniao = PASTA_ARQUIVOS / datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+    pasta_reuniao.mkdir()
+
+    audio_chunck = pydub.AudioSegment.empty()
+
+    while True:
+        if webrtc_ctx.audio_receiver:
+            container.markdown('Estou gravando.')
+            try:
+                frames_de_audio = webrtc_ctx.audio_receiver.get_frames(
+                    timeout=1)
+            except queue.Empty:
+                time.sleep(0.1)
+                continue
+            for frame in frames_de_audio:
+                sound = pydub.AudioSegment(
+                    data=frame.to_ndarray().tobytes(),
+                    sample_width=frame.format.bytes,
+                    frame_rate=frame.sample_rate,
+                    channels=len(frame.layout.channels)
+                )
+                audio_chunck += sound
+            if len(audio_chunck) > 0:
+                audio_chunck.export(pasta_reuniao / 'audio_temp.mp3')
+        else:
+            break
 
 
 def tab_selecao_reuniao():
